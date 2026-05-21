@@ -40,29 +40,47 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
             .authorizeHttpRequests(auth -> auth
-                // Rutas públicas
+                // Recursos estáticos — SIEMPRE primero
                 .requestMatchers(
-                    "/",
-                    "/auth/**",
-                    "/trabajos",
-                    "/trabajos/{id}",
-                    "/perfil/{id}",
                     "/css/**",
                     "/js/**",
                     "/img/**",
-                    "/imagenes/**"
+                    "/webjars/**",
+                    "/favicon.ico",
+                    "/error",
+                    "/error/**"
                 ).permitAll()
+
+                // Imágenes servidas desde controller
+                .requestMatchers("/imagenes/**").permitAll()
+
+                // Rutas públicas
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/auth/**").permitAll()
+                .requestMatchers("/trabajos").permitAll()
+                .requestMatchers("/trabajos/{id}").permitAll()
+                .requestMatchers("/perfil/{id}").permitAll()
 
                 // Solo admin
                 .requestMatchers("/admin/**").hasRole("ADMIN")
 
                 // Solo empleador
-                .requestMatchers("/mis-trabajos/**", "/trabajos/nuevo", "/trabajos/editar/**")
-                    .hasRole("EMPLEADOR")
+                .requestMatchers(
+                    "/trabajos/nuevo",
+                    "/trabajos/editar/**",
+                    "/trabajos/mis-trabajos",
+                    "/trabajos/*/estado",
+                    "/trabajos/*/postulaciones",
+                    "/postulaciones/*/rechazar",
+                    "/contratos/aceptar/**"
+                ).hasRole("EMPLEADOR")
 
                 // Solo trabajador
-                .requestMatchers("/mis-postulaciones/**")
-                    .hasRole("TRABAJADOR")
+                .requestMatchers(
+                    "/mis-postulaciones",
+                    "/trabajos/*/postular",
+                    "/postulaciones/*/retirar"
+                ).hasRole("TRABAJADOR")
 
                 // Cualquier usuario autenticado
                 .anyRequest().authenticated()
@@ -77,7 +95,7 @@ public class SecurityConfig {
             )
 
             .logout(logout -> logout
-                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout"))
+                .logoutRequestMatcher(new AntPathRequestMatcher("/auth/logout", "POST"))
                 .logoutSuccessUrl("/auth/login?logout=true")
                 .invalidateHttpSession(true)
                 .deleteCookies("JSESSIONID")

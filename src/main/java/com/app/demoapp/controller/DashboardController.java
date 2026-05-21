@@ -24,7 +24,15 @@ public class DashboardController {
     public String index(Model model) {
         model.addAttribute("trabajos", trabajoService.findAbiertos());
         model.addAttribute("categorias", trabajoService.findTodasCategorias());
+
+        // Datos del usuario si hay sesión activa
         authUtil.getUsuarioActual().ifPresent(u -> agregarDatosUsuario(u, model));
+
+        // Valores por defecto para el navbar cuando no hay sesión
+        if (!model.containsAttribute("notificacionesNoLeidas")) {
+            model.addAttribute("notificacionesNoLeidas", 0);
+        }
+
         return "index";
     }
 
