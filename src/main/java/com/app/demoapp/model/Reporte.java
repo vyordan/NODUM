@@ -1,5 +1,5 @@
 package com.app.demoapp.model;
-
+ 
 import com.app.demoapp.model.enums.EstadoReporte;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -19,11 +19,11 @@ public class Reporte {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reportante_id", nullable = false)
     private Usuario reportante;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "reportado_id", nullable = false)
     private Usuario reportado;
 

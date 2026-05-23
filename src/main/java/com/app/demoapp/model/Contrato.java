@@ -22,7 +22,7 @@ public class Contrato {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "postulacion_id", nullable = false, unique = true)
     private Postulacion postulacion;
 
@@ -38,12 +38,12 @@ public class Contrato {
     @Column(nullable = false)
     private EstadoContrato estado = EstadoContrato.ACTIVO;
 
-    @OneToOne(mappedBy = "contrato", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "contrato", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Escrow escrow;
 
-    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Resena> resenas;
 
-    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "contrato", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<MensajeChat> mensajes;
 }

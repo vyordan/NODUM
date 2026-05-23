@@ -22,12 +22,12 @@ public class Transaccion {
     private Long id;
 
     // Billetera que origina el movimiento (null en depósitos externos)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "billetera_id")
     private Billetera billetera;
 
     // Billetera destino (null en retiros)
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "billetera_destino_id")
     private Billetera billeteraDestino;
 
@@ -46,7 +46,7 @@ public class Transaccion {
     private LocalDateTime fecha = LocalDateTime.now();
 
     // Referencia opcional al contrato relacionado
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "contrato_id")
     private Contrato contrato;
 
